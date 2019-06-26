@@ -24,6 +24,7 @@ router.post('/surveys', requireToken, (req, res, next) => {
 // index
 router.get('/surveys', requireToken, (req, res, next) => {
   Survey.find()
+    .populate('options')
     .then(surveys => {
       return surveys.map(survey => survey.toObject())
     })
@@ -48,6 +49,7 @@ router.patch('/surveys/:id', requireToken, removeBlanks, (req, res, next) => {
   delete req.body.survey.owner
 
   Survey.findById(req.params.id)
+    .populate('options')
     .then(handle404)
     .then(survey => {
       requireOwnership(req, survey)
