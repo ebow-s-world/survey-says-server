@@ -5,6 +5,7 @@ const passport = require('passport')
 
 // pull in Mongoose model for responses
 const Response = require('../models/response')
+const Option = require('../models/option')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -60,15 +61,23 @@ router.get('/responses/:id', requireToken, (req, res, next) => {
 router.post('/responses', requireToken, (req, res, next) => {
   // set owner of new response to be current user
   req.body.response.owner = req.user.id
-
-  Response.create(req.body.response)
-    // respond to succesful `create` with status 201 and JSON of new "response"
+  let option
+  Option.findById(req.body.response.answer)
+    .then(handle404)
+    .then(optionResponse => {
+      option = optionResponse
+      // requireOwnership(req, option)
+    })
+    .then(() => Response.create(req.body.response))
     .then(response => {
+      option.responses.push(response.id)
+      option.save()
+      return response
+    })
+    .then(response => {
+      console.log(response)
       res.status(201).json({ response: response.toObject() })
     })
-    // if an error occurs, pass it off to our error handler
-    // the error handler needs the error message and the `res` object so that it
-    // can send an error message back to the client
     .catch(next)
 })
 
