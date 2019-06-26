@@ -9,6 +9,7 @@ const exampleRoutes = require('./app/routes/example_routes')
 const userRoutes = require('./app/routes/user_routes')
 const surveyRoutes = require('./app/routes/survey-routes')
 
+const optionRoutes = require('./app/routes/option_routes')
 // require error handling middleware
 const errorHandler = require('./lib/error_handler')
 
@@ -62,6 +63,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(exampleRoutes)
 app.use(userRoutes)
 app.use(surveyRoutes)
+
+app.use(optionRoutes)
 
 // register error handling middleware
 // note that this comes after the route middlewares, because it needs to be
