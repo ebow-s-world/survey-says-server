@@ -10,11 +10,11 @@ const surveySchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  options: {
+  options: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Option',
     required: true
-  }
+  }]
 })
 
 module.exports = mongoose.model('Survey', surveySchema)
