@@ -26,7 +26,6 @@ router.get('/surveys', requireToken, (req, res, next) => {
   Survey.find()
     .populate('options')
     .then(surveys => {
-      console.log(surveys[0].toObject())
       return surveys.map(survey => survey.toObject())
     })
     .then(surveys => res.status(200).json({ survey: surveys }))
