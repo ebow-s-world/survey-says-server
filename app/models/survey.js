@@ -12,9 +12,9 @@ const surveySchema = new mongoose.Schema({
   },
   options: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Option',
-    required: true
+    ref: 'Option'
   }]
 })
 
-module.exports = mongoose.model('Survey', surveySchema)
+const Survey = mongoose.model('Survey', surveySchema)
+module.exports = Survey
