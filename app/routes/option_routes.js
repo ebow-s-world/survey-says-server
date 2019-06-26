@@ -2,7 +2,7 @@ const express = require('express')
 const passport = require('passport')
 
 const Option = require('../models/option')
-const Server = require('../models/survey')
+const Survey = require('../models/survey')
 
 const customErrors = require('../../lib/custom_errors')
 
@@ -32,25 +32,29 @@ const router = express.Router()
 
 router.post('/options', requireToken, (req, res, next) => {
   req.body.option.owner = req.user.id
-  let option = {}
-  Option.create(req.body.option)
-    .then(newOption => {
-      option = newOption
+  let survey
+  Survey.findById(req.body.option.survey)
+    .then(handle404)
+    .then(surveyResponse => {
+      survey = surveyResponse
+      requireOwnership(req, survey)
+    })
+    .then(() => Option.create(req.body.option))
+    .then(option => {
+      survey.options.push(option.id)
+      survey.save()
       return option
     })
-    .then(() => Server.findById(option.server))
-    .then(handle404)
-    .then(server => {
-      requireOwnership(req, server)
-      return server.update({ $push: {options: option.id} })
+    .then(option => {
+      console.log(option)
+      res.status(201).json({ option: option.toObject() })
     })
-    .then(() => res.status(201).json({ option: option.toObject() }))
     .catch(next)
 })
 
 router.patch('/options/:id', requireToken, removeBlanks, (req, res, next) => {
   delete req.body.option.owner
-  delete req.body.option.server
+  delete req.body.option.survey
   delete req.body.option.responses
 
   Option.findById(req.params.id)

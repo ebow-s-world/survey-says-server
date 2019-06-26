@@ -20,7 +20,9 @@ const optionSchema = new mongoose.Schema({
     ref: 'Response'
   }]
 }, {
-  timestamps: true
+  timestamps: true,
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 })
 
 optionSchema.virtual('count').get(function () {

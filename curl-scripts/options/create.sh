@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TOKEN=0062464bc1fd8cc6714db7c10ba0c300
+TOKEN=0ec73f5d9052a441bab342e61d89480c
 NAME=test
 
 API="http://localhost:4741"
@@ -14,7 +14,7 @@ curl "${API}${URL_PATH}" \
   --data '{
     "option": {
       "name": "'"${NAME}"'",
-      "survey": "'"5d1394d90535441875b86f92"'"
+      "survey": "'"5d13b714f7b45b320c5cf971"'"
     }
   }'
 
