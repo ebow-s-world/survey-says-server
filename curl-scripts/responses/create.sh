@@ -1,15 +1,8 @@
-#!/bin/bash
-
-<<<<<<< HEAD
-TOKEN=0ec73f5d9052a441bab342e61d89480c
-TITLE=Hello123
-=======
 TOKEN=626edf77adf111ca87c4eb41c39c0c1e
-TITLE=Test123
->>>>>>> Modify curl scripts
+NAME=test1
 
 API="http://localhost:4741"
-URL_PATH="/surveys"
+URL_PATH="/responses"
 
 curl "${API}${URL_PATH}" \
   --include \
@@ -17,8 +10,9 @@ curl "${API}${URL_PATH}" \
   --header "Content-Type: application/json" \
   --header "Authorization: Bearer ${TOKEN}" \
   --data '{
-    "survey": {
-      "title": "'"${TITLE}"'"
+    "response": {
+      "name": "'"${NAME}"'",
+      "option": "'"5d13cf430d96e994ef074bba"'"
     }
   }'
 
