@@ -41,8 +41,11 @@ router.post('/options', requireToken, (req, res, next) => {
     })
     .then(() => Option.create(req.body.option))
     .then(option => {
-      survey.options.push(option.id)
-      survey.save()
+      Survey.findByIdAndUpdate(
+        survey.id,
+        { $push: { 'options': option.id } },
+        (err, model) => { console.error(err) }
+      )
       return option
     })
     .then(option => {
