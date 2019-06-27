@@ -44,11 +44,8 @@ router.post('/options', requireToken, (req, res, next) => {
       Survey.findByIdAndUpdate(
         survey.id,
         { $push: { 'options': option.id } },
-        (err, model) => {
-          console.log(err)
-        }
+        (err, model) => { console.error(err) }
       )
-      console.log('==========' + survey + '=============')
       return option
     })
     .then(option => {
