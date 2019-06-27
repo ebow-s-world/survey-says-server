@@ -59,25 +59,24 @@ router.get('/responses/:id', requireToken, (req, res, next) => {
 // CREATE
 // POST /responses
 router.post('/responses', requireToken, (req, res, next) => {
-  // set owner of new response to be current user
   req.body.response.owner = req.user.id
   let option
   Option.findById(req.body.response.answer)
     .then(handle404)
     .then(optionResponse => {
       option = optionResponse
-      requireOwnership(req, option)
     })
     .then(() => Response.create(req.body.response))
     .then(response => {
       Option.findByIdAndUpdate(
-      option.id,
-      { $push: { 'responses': response.id } },
-      (err, model) => {
-        console.log(err)
-      }
-    )
-    return option
+        option.id,
+        { $push: { 'responses': response.id } },
+        (err, model) => {
+          console.log(err)
+        }
+      )
+      return option
+    })
     .then(response => {
       console.log(response)
       res.status(201).json({ response: response.toObject() })
