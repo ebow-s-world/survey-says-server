@@ -32,6 +32,16 @@ router.get('/surveys', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+router.get('/my-surveys', requireToken, (req, res, next) => {
+  Survey.find({ owner: req.user.id })
+    .populate('options')
+    .then(surveys => {
+      return surveys.map(survey => survey.toObject())
+    })
+    .then(surveys => res.status(200).json({ survey: surveys }))
+    .catch(next)
+})
+
 // DESTROY
 router.delete('/surveys/:id', requireToken, (req, res, next) => {
   Survey.findById(req.params.id)
