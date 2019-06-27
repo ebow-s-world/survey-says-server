@@ -66,14 +66,18 @@ router.post('/responses', requireToken, (req, res, next) => {
     .then(handle404)
     .then(optionResponse => {
       option = optionResponse
-      // requireOwnership(req, option)
+      requireOwnership(req, option)
     })
     .then(() => Response.create(req.body.response))
     .then(response => {
-      option.responses.push(response.id)
-      option.save()
-      return response
-    })
+      Option.findByIdAndUpdate(
+      option.id,
+      { $push: { 'responses': response.id } },
+      (err, model) => {
+        console.log(err)
+      }
+    )
+    return option
     .then(response => {
       console.log(response)
       res.status(201).json({ response: response.toObject() })

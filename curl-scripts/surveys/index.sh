@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TOKEN=0ec73f5d9052a441bab342e61d89480c
+TOKEN=626edf77adf111ca87c4eb41c39c0c1e
 
 API="http://localhost:4741"
 URL_PATH="/surveys"
