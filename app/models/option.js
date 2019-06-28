@@ -21,6 +21,11 @@ const optionSchema = new mongoose.Schema({
   }]
 }, {
   timestamps: true,
+  transform: (_doc, option) => {
+    delete option.owner
+    delete option.responses
+    return option
+  },
   toObject: { virtuals: true },
   toJSON: { virtuals: true }
 })
