@@ -49,7 +49,6 @@ router.post('/options', requireToken, (req, res, next) => {
       return option
     })
     .then(option => {
-      console.log(option)
       res.status(201).json({ option: option.toObject() })
     })
     .catch(next)
