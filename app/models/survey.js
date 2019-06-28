@@ -14,6 +14,12 @@ const surveySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Option'
   }]
+},
+{
+  transform: (_doc, survey) => {
+    delete survey.owner
+    return survey
+  }
 })
 
 const Survey = mongoose.model('Survey', surveySchema)

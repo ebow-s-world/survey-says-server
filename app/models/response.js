@@ -11,6 +11,12 @@ const responseSchema = new mongoose.Schema({
     ref: 'Option',
     required: true
   }
+},
+{
+  transform: (_doc, response) => {
+    delete response.owner
+    return response
+  }
 })
 
 const Response = mongoose.model('Response', responseSchema)
