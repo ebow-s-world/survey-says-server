@@ -5,7 +5,7 @@ const passport = require('passport')
 
 // pull in Mongoose model for responses
 const Response = require('../models/response')
-// const Option = require('../models/option')
+const Option = require('../models/option')
 
 // this is a collection of methods that help us detect situations when we need
 // to throw a custom error
@@ -84,6 +84,24 @@ const router = express.Router()
 //     .catch(next)
 // })
 
+// router.post('/responses', requireToken, (req, res, next) => {
+//   req.body.response.owner = req.user.id
+//   Response.find({owner: req.user.id, survey: req.body.response.survey})
+//     .then(response => {
+//       if (response.length > 0) {
+//         res.status(400).json({errors: 'You\'ve already taken this survey'})
+//       } else {
+//         Response.create(req.body.response)
+//           .then(response => {
+//             res.status(201).json({ response: response.toObject() })
+//           })
+//           .catch(next)
+//       }
+//     })
+// })
+
+
+
 router.post('/responses', requireToken, (req, res, next) => {
   req.body.response.owner = req.user.id
   Response.find({owner: req.user.id, survey: req.body.response.survey})
@@ -92,12 +110,23 @@ router.post('/responses', requireToken, (req, res, next) => {
         res.status(400).json({errors: 'You\'ve already taken this survey'})
       } else {
         Response.create(req.body.response)
-          .then(response => {
-            res.status(201).json({ response: response.toObject() })
-          })
-          .catch(next)
-      }
+          .then((response) => {
+            let option
+            Option.findByIdAndUpdate(response.answer, { $push: { 'responses': response.id } })
+              .then(handle404)
+              .then(optionResponse => {
+                option = optionResponse
+                console.log(option)
+                return option
+              })
+              .then(response => {
+                res.status(201).json({ response: response.toObject() })
+              })
+              .catch(next)
     })
+    .catch(next)
+}
+})
 })
 
 // // UPDATE
