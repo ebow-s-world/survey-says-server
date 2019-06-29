@@ -58,29 +58,75 @@ const router = express.Router()
 
 // CREATE
 // POST /responses
+// router.post('/responses', requireToken, (req, res, next) => {
+//   req.body.response.owner = req.user.id
+//   let option
+//   Option.findById(req.body.response.answer)
+//     .then(handle404)
+//     .then(optionResponse => {
+//       option = optionResponse
+//     })
+//     .then(() => Response.create(req.body.response))
+//     .then(response => {
+//       Option.findByIdAndUpdate(
+//         option.id,
+//         { $push: { 'responses': response.id } },
+//         (err, model) => {
+//           console.log(err)
+//         }
+//       )
+//       return option
+//     })
+//     .then(response => {
+//       console.log(response)
+//       res.status(201).json({ response: response.toObject() })
+//     })
+//     .catch(next)
+// })
+
+// router.post('/responses', requireToken, (req, res, next) => {
+//   req.body.response.owner = req.user.id
+//   Response.find({owner: req.user.id, survey: req.body.response.survey})
+//     .then(response => {
+//       if (response.length > 0) {
+//         res.status(400).json({errors: 'You\'ve already taken this survey'})
+//       } else {
+//         Response.create(req.body.response)
+//           .then(response => {
+//             res.status(201).json({ response: response.toObject() })
+//           })
+//           .catch(next)
+//       }
+//     })
+// })
+
+
+
 router.post('/responses', requireToken, (req, res, next) => {
   req.body.response.owner = req.user.id
-  let option
-  Option.findById(req.body.response.answer)
-    .then(handle404)
-    .then(optionResponse => {
-      option = optionResponse
-    })
-    .then(() => Response.create(req.body.response))
+  Response.find({owner: req.user.id, survey: req.body.response.survey})
     .then(response => {
-      Option.findByIdAndUpdate(
-        option.id,
-        { $push: { 'responses': response.id } },
-        (err, model) => {
-          console.error(err)
-        }
-      )
-      return option
-    })
-    .then(response => {
-      res.status(201).json({ response: response.toObject() })
+      if (response.length > 0) {
+        res.status(400).json({errors: 'You\'ve already taken this survey'})
+      } else {
+        Response.create(req.body.response)
+          .then((response) => {
+            let option
+            Option.findByIdAndUpdate(response.answer, { $push: { 'responses': response.id } })
+              .then(handle404)
+              .then(optionResponse => {
+                option = optionResponse
+                console.log(option)
+                return option
+              })
+              .then(response => {
+                res.status(201).json({ response: response.toObject() })
+              })
+              .catch(next)
     })
     .catch(next)
+}
+})
 })
 
 // // UPDATE

@@ -25,6 +25,7 @@ router.post('/surveys', requireToken, (req, res, next) => {
 router.get('/surveys', requireToken, (req, res, next) => {
   Survey.find()
     .populate('options')
+    .populate('responses')
     .then(surveys => {
       return surveys.map(survey => survey.toObject())
     })
@@ -35,6 +36,7 @@ router.get('/surveys', requireToken, (req, res, next) => {
 router.get('/my-surveys', requireToken, (req, res, next) => {
   Survey.find({ owner: req.user.id })
     .populate('options')
+    .populate('responses')
     .then(surveys => {
       return surveys.map(survey => survey.toObject())
     })
