@@ -10,6 +10,11 @@ const responseSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Option',
     required: true
+  },
+  survey: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Survey',
+    required: true
   }
 },
 {
