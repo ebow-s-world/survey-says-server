@@ -86,7 +86,6 @@ const router = express.Router()
 
 router.post('/responses', requireToken, (req, res, next) => {
   req.body.response.owner = req.user.id
-  console.log(req.body.response.survey)
   Response.find({owner: req.user.id, survey: req.body.response.survey})
     .then(response => {
       if (response.length > 0) {
