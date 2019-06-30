@@ -72,13 +72,12 @@ const router = express.Router()
 //         option.id,
 //         { $push: { 'responses': response.id } },
 //         (err, model) => {
-//           console.log(err)
+//           console.error
 //         }
 //       )
 //       return option
 //     })
 //     .then(response => {
-//       console.log(response)
 //       res.status(201).json({ response: response.toObject() })
 //     })
 //     .catch(next)
@@ -116,7 +115,6 @@ router.post('/responses', requireToken, (req, res, next) => {
               .then(handle404)
               .then(optionResponse => {
                 option = optionResponse
-                console.log(option)
                 return option
               })
               .then(response => {

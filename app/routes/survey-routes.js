@@ -16,7 +16,8 @@ router.post('/surveys', requireToken, (req, res, next) => {
 
   Survey.create(req.body.survey)
     .then(survey => {
-      res.status(201).json({ survey: survey.toObject() })
+      res.status(201)
+        .json({ survey: survey.toObject() })
     })
     .catch(next)
 })
